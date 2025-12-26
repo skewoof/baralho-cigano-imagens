@@ -2,50 +2,62 @@
 from pathlib import Path
 from PIL import Image
 
+# ================= CONFIG =================
 INPUT_DIR = Path("images/cigano")
 OUTPUT_DIR = Path("images/cigano_cropped")
 
+TARGET_WIDTH = 683
+TARGET_HEIGHT = 1024
+ASPECT_RATIO = TARGET_WIDTH / TARGET_HEIGHT  # ≈ 0.666
+# ==========================================
+
+IMG_EXTS = {".png", ".jpg", ".jpeg", ".webp"}
+
+def iter_images():
+    for p in sorted(INPUT_DIR.iterdir()):
+        if p.is_file() and p.suffix.lower() in IMG_EXTS:
+            yield p
+
 def main():
-    images = sorted(
-        p for p in INPUT_DIR.iterdir()
-        if p.suffix.lower() in [".png", ".jpg", ".jpeg", ".webp"]
-    )
-
-    if not images:
-        print("❌ Nenhuma imagem encontrada.")
-        return
-
-    # Descobre o menor tamanho comum
-    widths, heights = [], []
-    for img in images:
-        with Image.open(img) as im:
-            w, h = im.size
-            widths.append(w)
-            heights.append(h)
-
-    target_w = min(widths)
-    target_h = min(heights)
-
-    print(f"🎯 Tamanho alvo: {target_w} x {target_h}")
-
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    for img in images:
-        with Image.open(img) as im:
+    total = 0
+    cropped = 0
+    kept = 0
+
+    for img_path in iter_images():
+        total += 1
+        out_path = OUTPUT_DIR / img_path.name
+
+        with Image.open(img_path) as im:
+            im = im.convert("RGBA")
             w, h = im.size
-            left = (w - target_w) // 2
-            top = (h - target_h) // 2
-            right = left + target_w
-            bottom = top + target_h
 
-            cropped = im.crop((left, top, right, bottom))
-            out_path = OUTPUT_DIR / img.name
-            cropped.save(out_path)
+            # 🔑 largura ideal baseada na ALTURA TOTAL
+            ideal_w = int(h * ASPECT_RATIO)
 
-            print(f"✂️ {img.name} → recortada")
+            if w > ideal_w:
+                # ✂️ recorte SOMENTE horizontal, centralizado
+                left = (w - ideal_w) // 2
+                right = left + ideal_w
+                out = im.crop((left, 0, right, h))
+                cropped += 1
+                print(f"✂️ {img_path.name}: {w}x{h} → {ideal_w}x{h}")
+            else:
+                # ✅ já está no formato certo
+                out = im
+                kept += 1
+                print(f"✅ {img_path.name}: mantida ({w}x{h})")
 
-    print("\n✅ Recorte finalizado com sucesso!")
-    print(f"📁 Resultado em: {OUTPUT_DIR}")
+            # 🔁 padroniza tamanho final (opcional, mas recomendado)
+            out = out.resize((TARGET_WIDTH, TARGET_HEIGHT), Image.Resampling.LANCZOS)
+            out.save(out_path, format="PNG", optimize=True)
+
+    print("\n=== RESUMO ===")
+    print(f"Total: {total}")
+    print(f"Recortadas (folha): {cropped}")
+    print(f"Mantidas (já carta): {kept}")
+    print(f"Saída em: {OUTPUT_DIR}")
 
 if __name__ == "__main__":
     main()
