@@ -11,14 +11,14 @@ INPUT_CSV = "cigano_raw.csv"        # CSV que aponta para as imagens originais
 OUTPUT_CSV = "cigano_cropped.csv"   # CSV novo (saída)
 
 DECK_COLUMN = "Cigano"
-CROPPED_DIR = Path("images/cigano_cropped")
+CROPPED_DIR = Path("imagens/cigano_cropped")
 # ==================
 
 def raw_url(filename: str) -> str:
     return (
         f"https://raw.githubusercontent.com/"
         f"{REPO_OWNER}/{REPO_NAME}/{BRANCH}/"
-        f"images/cigano_cropped/{filename}"
+        f"imagens/cigano_cropped/{filename}"
     )
 
 def main():
@@ -75,7 +75,7 @@ def main():
 
     print("✅ CSV de cartas recortadas gerado com sucesso!")
     print(f"📄 Arquivo: {OUTPUT_CSV}")
-    print(f"🔗 Apontando para: images/cigano_cropped/")
+    print(f"🔗 Apontando para: imagens/cigano_cropped/")
 
 if __name__ == "__main__":
     main()

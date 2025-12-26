@@ -3,8 +3,8 @@ from pathlib import Path
 from PIL import Image
 
 # ================= CONFIG =================
-INPUT_DIR = Path("images/cigano")
-OUTPUT_DIR = Path("images/cigano_cropped")
+INPUT_DIR = Path("imagens/cigano")
+OUTPUT_DIR = Path("imagens/cigano_cropped")
 
 TARGET_WIDTH = 683
 TARGET_HEIGHT = 1024

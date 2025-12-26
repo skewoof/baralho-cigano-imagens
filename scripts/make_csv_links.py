@@ -12,10 +12,10 @@ def iter_images(indir: Path):
 
 def main():
     ap = argparse.ArgumentParser(description="Gera CSV com links raw do GitHub para imagens.")
-    ap.add_argument("--indir", required=True, help="Pasta das imagens (ex: images/cigano_cropped)")
+    ap.add_argument("--indir", required=True, help="Pasta das imagens (ex: imagens/cigano_cropped)")
     ap.add_argument("--repo", required=True, help="Repo no formato owner/repo")
     ap.add_argument("--branch", default="main", help="Branch (default: main)")
-    ap.add_argument("--prefix", required=True, help="Caminho das imagens no repo (ex: images/cigano_cropped)")
+    ap.add_argument("--prefix", required=True, help="Caminho das imagens no repo (ex: imagens/cigano_cropped)")
     ap.add_argument("--outcsv", required=True, help="CSV de saída (ex: cigano_cropped_links.csv)")
     args = ap.parse_args()
 

@@ -17,7 +17,7 @@ OUTPUT_CSV = "cigano_raw.csv"
 
 DECK_COLUMN_NAME = "Cigano"
 DECK_SIZE = 36
-IMAGES_DIR = Path("images/cigano")
+IMAGES_DIR = Path("imagens/cigano")
 # ==================
 
 def is_url(value: str) -> bool:

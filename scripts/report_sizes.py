@@ -30,7 +30,7 @@ def iter_images(indir: Path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--indir", required=True, help="Pasta com imagens (ex.: images/cigano)")
+    ap.add_argument("--indir", required=True, help="Pasta com imagens (ex.: imagens/cigano)")
     ap.add_argument("--outdir", required=True, help="Pasta de relatórios (ex.: reports)")
     args = ap.parse_args()
 
